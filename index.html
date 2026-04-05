@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summit Peak Roasters | Artisanal Coffee</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --background: #fafaf8;
+            --foreground: #2C1E16;
+            --crema: #E8D8C8;
+            --amber: #D97941;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Multi-layered Shadow Protocol */
+        .premium-shadow {
+            box-shadow:
+                rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
+                rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
+                rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
+                rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
+                rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
+                rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
+        }
+
+        /* Animation System */
+        @keyframes blur-in {
+            0% { filter: blur(12px); opacity: 0; transform: translateY(20px); }
+            100% { filter: blur(0); opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-blur-in {
+            animation: blur-in 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes scroll-down {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes scroll-up {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0); }
+        }
+
+        .animate-scroll-down { animation: scroll-down 40s linear infinite; }
+        .animate-scroll-up { animation: scroll-up 40s linear infinite; }
+        .animate-scroll-down:hover, .animate-scroll-up:hover { animation-play-state: paused; }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.7s ease-out;
+        }
+
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .text-balance { text-wrap: balance; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--background); }
+        ::-webkit-scrollbar-thumb { background: var(--crema); border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl h-[68px] z-50 bg-white/40 backdrop-blur-md border border-white/30 rounded-full px-8 flex items-center justify-between premium-shadow scale-95 opacity-0 animate-blur-in">
+        <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-[0.2em]">
+            <a href="#shop" class="hover:opacity-60 transition-opacity">Shop</a>
+            <a href="#about" class="hover:opacity-60 transition-opacity">About</a>
+        </div>
+        
+        <div class="md:absolute md:left-1/2 md:-translate-x-1/2 flex flex-col items-center">
+            <span class="font-serif text-xl font-bold tracking-tighter">SUMMIT PEAK</span>
+            <span class="text-[8px] uppercase tracking-[0.4em] -mt-1 font-bold text-[#D97941]">Roasters</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <a href="#support" class="hidden md:block text-xs font-bold uppercase tracking-[0.2em] hover:opacity-60 transition-opacity">Support</a>
+            <button class="relative p-2">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                <span class="absolute top-0 right-0 bg-[#D97941] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <video autoPlay muted loop playsinline class="absolute inset-0 w-full h-full object-cover scale-105">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-coffee-pouring-into-a-cup-in-slow-motion-23504-large.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#fafaf8] via-[#fafaf8]/40 to-transparent"></div>
+        
+        <div class="relative z-10 text-center px-6 max-w-4xl">
+            <span class="inline-block animate-blur-in text-[10px] uppercase tracking-[0.5em] mb-6 text-[#D97941] font-bold" style="animation-delay: 0.2s;">Small Batch • Ethically Sourced</span>
+            <h1 class="animate-blur-in font-serif text-5xl md:text-8xl mb-8 text-balance leading-[1.1]" style="animation-delay: 0.4s;">Elevating Your Daily Coffee Experience</h1>
+            <p class="animate-blur-in text-base md:text-lg text-foreground/70 mb-10 max-w-xl mx-auto leading-relaxed" style="animation-delay: 0.6s;">Sustainably sourced, meticulously small-batch roasted, and delivered straight to your door at the peak of freshness.</p>
+            <div class="animate-blur-in" style="animation-delay: 0.8s;">
+                <button class="group bg-[#2C1E16] text-white px-10 py-5 rounded-full flex items-center gap-3 mx-auto hover:bg-[#D97941] transition-all duration-500 premium-shadow uppercase text-xs font-bold tracking-widest">
+                    Shop Fresh Roasts <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
+            <span class="text-[9px] uppercase tracking-[0.4em]">Scroll</span>
+            <div class="w-[1px] h-12 bg-foreground animate-pulse"></div>
+        </div>
+    </section>
+
+    <section id="about" class="py-32 px-6 lg:px-8 max-w-7xl mx-auto section-reveal">
+        <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[750px]">
+            <div class="reveal-on-scroll md:col-span-2 md:row-span-2 relative rounded-[32px] overflow-hidden group premium-shadow">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Roastery">
+                <div class="absolute bottom-6 left-6 right-6 p-8 bg-white/90 backdrop-blur-md rounded-[24px] premium-shadow">
+                    <h3 class="font-serif text-2xl mb-2">The Roastery Experience</h3>
+                    <p class="text-sm text-foreground/70 leading-relaxed">"Craftsmanship in every cup. Take a virtual tour of our roasting process and see the dedication."</p>
+                </div>
+            </div>
+            <div class="reveal-on-scroll bg-[#E8D8C8] p-10 rounded-[32px] flex flex-col justify-end group">
+                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 premium-shadow group-hover:scale-110 transition-transform">
+                    <i data-lucide="globe" class="text-[#D97941] w-6 h-6"></i>
+                </div>
+                <h3 class="font-serif text-xl mb-2">Single Origin Focus</h3>
+                <p class="text-sm text-foreground/70">Explore unique, terroir-driven flavor profiles from around the globe.</p>
+            </div>
+            <div class="reveal-on-scroll bg-[#2C1E16] text-white p-10 rounded-[32px] flex flex-col justify-end group">
+                 <h3 class="font-serif text-xl mb-2">Brewing Guides</h3>
+                 <p class="text-sm text-white/70">Master the pour-over at home with our expert barista tutorials.</p>
+            </div>
+            <div class="reveal-on-scroll md:col-span-2 bg-zinc-100 relative rounded-[32px] overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000">
+                <div class="absolute inset-0 p-10 flex flex-col justify-end">
+                    <h3 class="font-serif text-xl mb-2">Flexible Subscriptions</h3>
+                    <p class="text-sm text-foreground/70">Set your schedule. Never wake up without fresh coffee again.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shop" class="py-32 bg-[#f5f5f0] section-reveal">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                <div>
+                    <span class="text-[#D97941] font-bold uppercase tracking-[0.4em] text-[10px]">Curated Collection</span>
+                    <h2 class="font-serif text-5xl md:text-6xl mt-4">Shop Our Roasts</h2>
+                </div>
+                <div class="flex bg-white p-1.5 rounded-full premium-shadow border border-black/5">
+                    <button class="px-8 py-2.5 text-xs font-bold uppercase tracking-widest rounded-full bg-[#2C1E16] text-white">All Roasts</button>
+                    <button class="px-8 py-2.5 text-xs font-bold uppercase tracking-widest rounded-full text-foreground/40 hover:text-foreground">Equipment</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div class="reveal-on-scroll group bg-white rounded-[32px] p-5 premium-shadow hover:scale-[1.02] transition-all duration-500">
+                    <div class="aspect-square rounded-[24px] overflow-hidden relative mb-6">
+                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest">Bestseller</span>
+                        <button class="absolute bottom-4 right-4 bg-[#2C1E16] text-white p-4 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-serif text-xl mb-1">Ethiopian Yirgacheffe</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-foreground/40 font-semibold uppercase tracking-wider">Single Origin</span>
+                        <span class="font-bold text-[#D97941]">$22.00</span>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll group bg-white rounded-[32px] p-5 premium-shadow hover:scale-[1.02] transition-all duration-500" style="transition-delay: 0.1s;">
+                    <div class="aspect-square rounded-[24px] overflow-hidden relative mb-6">
+                        <img src="https://images.unsplash.com/photo-1580915411954-282cb1b0d780" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest">Limited</span>
+                        <button class="absolute bottom-4 right-4 bg-[#2C1E16] text-white p-4 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-serif text-xl mb-1">Colombian Supremo</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-foreground/40 font-semibold uppercase tracking-wider">Medium Roast</span>
+                        <span class="font-bold text-[#D97941]">$20.00</span>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll group bg-white rounded-[32px] p-5 premium-shadow hover:scale-[1.02] transition-all duration-500" style="transition-delay: 0.2s;">
+                    <div class="aspect-square rounded-[24px] overflow-hidden relative mb-6">
+                        <img src="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest">Dark Roast</span>
+                        <button class="absolute bottom-4 right-4 bg-[#2C1E16] text-white p-4 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-serif text-xl mb-1">Midnight Summit</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-foreground/40 font-semibold uppercase tracking-wider">House Blend</span>
+                        <span class="font-bold text-[#D97941]">$21.00</span>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll group bg-white rounded-[32px] p-5 premium-shadow hover:scale-[1.02] transition-all duration-500" style="transition-delay: 0.3s;">
+                    <div class="aspect-square rounded-[24px] overflow-hidden relative mb-6">
+                        <img src="https://images.unsplash.com/photo-1544787210-2213d44ad53e" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest">Essential</span>
+                        <button class="absolute bottom-4 right-4 bg-[#2C1E16] text-white p-4 rounded-full opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <h3 class="font-serif text-xl mb-1">Hario V60 Dripper</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-foreground/40 font-semibold uppercase tracking-wider">Brew Gear</span>
+                        <span class="font-bold text-[#D97941]">$25.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 bg-[#fafaf8] overflow-hidden relative h-[850px] section-reveal">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+            <div class="flex flex-col gap-10 animate-scroll-down">
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <div class="flex gap-1 mb-6"><i data-lucide="star" class="w-4 h-4 fill-[#D97941] text-[#D97941]"></i><i data-lucide="star" class="w-4 h-4 fill-[#D97941] text-[#D97941]"></i><i data-lucide="star" class="w-4 h-4 fill-[#D97941] text-[#D97941]"></i><i data-lucide="star" class="w-4 h-4 fill-[#D97941] text-[#D97941]"></i><i data-lucide="star" class="w-4 h-4 fill-[#D97941] text-[#D97941]"></i></div>
+                    <p class="font-serif text-2xl mb-8 italic text-balance leading-relaxed">"The Ethiopian Yirgacheffe is simply life-changing. Bright, floral, and perfect."</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold">Sarah L. <span class="block text-[10px] text-foreground/40 font-normal tracking-widest uppercase">Portland, OR</span></span>
+                        <span class="text-[9px] uppercase tracking-widest bg-[#E8D8C8] px-3 py-1 rounded-full font-bold">Whole Bean</span>
+                    </div>
+                </div>
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <p class="font-serif text-2xl mb-8 italic">"Their decaf actually tastes like real coffee! Swiss Water process is key."</p>
+                    <span class="text-sm font-bold">Chloe M. <span class="block text-[10px] text-foreground/40 font-normal">Brooklyn, NY</span></span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex flex-col gap-10 animate-scroll-up">
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <p class="font-serif text-2xl mb-8 italic">"I finally understand how to texture milk. Incredible instructors!"</p>
+                    <span class="text-sm font-bold">Marcus T. <span class="block text-[10px] text-foreground/40 font-normal uppercase">Seattle, WA</span></span>
+                </div>
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <p class="font-serif text-2xl mb-8 italic">"The subscription is so flexible. Discovering new origins every month is a joy."</p>
+                    <span class="text-sm font-bold">David K. <span class="block text-[10px] text-foreground/40 font-normal">Denver, CO</span></span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex flex-col gap-10 animate-scroll-down">
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <p class="font-serif text-2xl mb-8 italic">"The Midnight Summit is the bold roast I've been searching for. Zero bitterness."</p>
+                    <span class="text-sm font-bold">Elena R. <span class="block text-[10px] text-foreground/40 font-normal uppercase">Austin, TX</span></span>
+                </div>
+                <div class="bg-white p-10 rounded-[32px] premium-shadow">
+                    <p class="font-serif text-2xl mb-8 italic">"Lightning fast shipping and the beans were roasted just two days prior."</p>
+                    <span class="text-sm font-bold">James H. <span class="block text-[10px] text-foreground/40 font-normal">Chicago, IL</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-[#fafaf8] to-transparent z-20"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#fafaf8] to-transparent z-20"></div>
+    </section>
+
+    <section class="py-32 px-6 section-reveal">
+        <div class="max-w-7xl mx-auto bg-[#D97941] rounded-[48px] p-12 md:p-28 text-center text-white relative overflow-hidden premium-shadow">
+            <div class="relative z-10">
+                <span class="text-[10px] uppercase tracking-[0.6em] font-bold opacity-80 mb-6 block">The Inner Circle</span>
+                <h2 class="font-serif text-4xl md:text-7xl mb-10 text-balance leading-tight">Join the Summit Peak Community</h2>
+                <p class="text-white/80 max-w-xl mx-auto mb-14 text-lg">Get 15% off your first order and exclusive brewing tips delivered to your inbox weekly.</p>
+                <form class="max-w-lg mx-auto flex flex-col sm:row p-2 bg-white/10 backdrop-blur-md rounded-3xl sm:rounded-full border border-white/20">
+                    <input type="email" placeholder="Enter your email address" class="bg-transparent border-none flex-1 px-8 py-4 outline-none placeholder:text-white/40 text-sm font-medium">
+                    <button class="bg-white text-[#D97941] px-10 py-4 rounded-full font-bold hover:bg-[#2C1E16] hover:text-white transition-all text-xs uppercase tracking-widest">Subscribe</button>
+                </form>
+            </div>
+            <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl"></div>
+        </div>
+    </section>
+
+    <footer class="relative bg-[#2C1E16] text-white pt-32 pb-16 overflow-hidden">
+        <div class="absolute bottom-0 left-0 w-full text-center pointer-events-none select-none overflow-hidden h-[400px]">
+            <h2 class="text-[200px] md:text-[500px] font-serif leading-none opacity-[0.03] translate-y-32">SUMMIT</h2>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-16 relative z-10">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex flex-col mb-8">
+                    <span class="font-serif text-3xl font-bold tracking-tighter">SUMMIT PEAK</span>
+                    <span class="text-[9px] uppercase tracking-[0.4em] font-bold text-[#D97941]">Roasters</span>
+                </div>
+                <p class="text-white/40 text-sm mb-10 leading-relaxed max-w-xs">Crafting connections, one cup at a time. From bean to brew, we prioritize excellence and ethical sourcing.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#D97941] hover:border-[#D97941] transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#D97941] hover:border-[#D97941] transition-all"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                    <a href="#" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#D97941] hover:border-[#D97941] transition-all"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-span-1">
+                <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-8 text-[#D97941]">Shop</h4>
+                <ul class="space-y-5 text-sm text-white/50 font-medium">
+                    <li><a href="#" class="hover:text-white transition-colors">All Coffee</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Brewing Gear</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Subscriptions</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Merchandise</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-span-1">
+                <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-8 text-[#D97941]">About</h4>
+                <ul class="space-y-5 text-sm text-white/50 font-medium">
+                    <li><a href="#" class="hover:text-white transition-colors">Our Story</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Ethical Sourcing</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Roastery Tour</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Wholesale</a></li>
+                </ul>
+            </div>
+
+            <div class="col-span-1">
+                <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-8 text-[#D97941]">Support</h4>
+                <ul class="space-y-5 text-sm text-white/50 font-medium">
+                    <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Brewing Guides</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping & FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-32 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">
+            <p>© 2026 Summit Peak Roasters. All Rights Reserved.</p>
+            <div class="flex gap-8 mt-6 md:mt-0">
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const revealElements = entry.target.querySelectorAll('.reveal-on-scroll');
+                    revealElements.forEach((el, index) => {
+                        setTimeout(() => {
+                            el.classList.add('active');
+                        }, index * 100); // Stagger effect
+                    });
+                    // Optional: Unobserve after animating
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Target all sections that contain revealable elements
+        document.querySelectorAll('.section-reveal, section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Simple smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Navbar appear on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const nav = document.querySelector('nav');
+            nav.classList.add('animate-blur-in');
+            nav.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
