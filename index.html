@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JK Brand | The Junior Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-primary": "#ffffff",
+          "surface-dim": "#d9dadb",
+          "tertiary": "#131515",
+          "surface-variant": "#e1e3e4",
+          "on-tertiary": "#ffffff",
+          "surface-bright": "#f8f9fa",
+          "secondary-fixed": "#8ff6d0",
+          "on-primary-container": "#758dd5",
+          "background": "#f8f9fa",
+          "surface-container-lowest": "#ffffff",
+          "surface": "#f8f9fa",
+          "on-tertiary-fixed-variant": "#464747",
+          "inverse-on-surface": "#f0f1f2",
+          "on-secondary-container": "#007257",
+          "secondary": "#006c52",
+          "secondary-container": "#8ff6d0",
+          "on-primary-fixed": "#00174a",
+          "inverse-primary": "#b3c5ff",
+          "tertiary-fixed": "#e3e2e2",
+          "on-secondary-fixed": "#002117",
+          "outline": "#757682",
+          "on-tertiary-container": "#8f9090",
+          "on-error-container": "#93000a",
+          "on-secondary": "#ffffff",
+          "outline-variant": "#c5c6d2",
+          "on-primary-fixed-variant": "#2a4386",
+          "on-error": "#ffffff",
+          "error-container": "#ffdad6",
+          "tertiary-fixed-dim": "#c6c6c6",
+          "on-surface": "#191c1d",
+          "surface-container-low": "#f3f4f5",
+          "on-secondary-fixed-variant": "#00513d",
+          "surface-tint": "#435b9f",
+          "on-tertiary-fixed": "#1a1c1c",
+          "on-background": "#191c1d",
+          "inverse-surface": "#2e3132",
+          "primary-fixed-dim": "#b3c5ff",
+          "surface-container-high": "#e7e8e9",
+          "primary-container": "#002366",
+          "on-surface-variant": "#444650",
+          "surface-container": "#edeeef",
+          "primary-fixed": "#dbe1ff",
+          "secondary-fixed-dim": "#73d9b5",
+          "surface-container-highest": "#e1e3e4",
+          "primary": "#00113a",
+          "tertiary-container": "#272929",
+          "error": "#ba1a1a"
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem",
+          lg: "0.5rem",
+          xl: "0.75rem",
+          full: "9999px"
+        },
+        fontFamily: {
+          headline: ["Plus Jakarta Sans"],
+          body: ["Manrope"],
+          label: ["Manrope"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .editorial-shadow { box-shadow: 0 20px 40px rgba(0,17,58,0.06); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Page transitions */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Drawer */
+  #nav-drawer { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+  #nav-drawer.open { transform: translateX(0); }
+  #drawer-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* Cart drawer */
+  #cart-drawer { transform: translateX(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+  #cart-drawer.open { transform: translateX(0); }
+  #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #cart-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* Filter sheet */
+  #filter-sheet { transform: translateY(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+  #filter-sheet.open { transform: translateY(0); }
+  #filter-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #filter-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* Image zoom on hover */
+  .product-img-wrap { overflow: hidden; }
+  .product-img-wrap img { transition: transform 0.7s ease; }
+  .product-img-wrap:hover img { transform: scale(1.05); }
+
+  /* Snap scroll */
+  .snap-x { scroll-snap-type: x mandatory; }
+  .snap-center { scroll-snap-align: center; }
+
+  /* Bottom nav active dot */
+  .nav-dot { width:4px; height:4px; border-radius:9999px; background:#006c52; margin-top:2px; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased overflow-x-hidden">
+
+<!-- ===================== HEADER ===================== -->
+<header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/85 backdrop-blur-xl flex justify-between items-center px-6 h-16">
+  <button onclick="openDrawer()" class="text-[#002366] hover:opacity-70 transition-opacity active:scale-95">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+  <button onclick="navigate('home')" class="font-headline text-lg font-bold tracking-[0.2em] text-[#002366] uppercase">JK BRAND</button>
+  <button onclick="openCart()" class="text-[#002366] hover:opacity-70 transition-opacity active:scale-95 relative">
+    <span class="material-symbols-outlined">shopping_bag</span>
+    <span id="cart-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-secondary text-white text-[9px] font-bold rounded-full flex items-center justify-center">2</span>
+  </button>
+</header>
+
+<!-- ===================== NAV DRAWER ===================== -->
+<div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[59]"></div>
+<nav id="nav-drawer" class="fixed inset-y-0 left-0 z-[60] bg-[#f8f9fa] w-80 rounded-r-2xl shadow-2xl flex flex-col p-8">
+  <div class="flex justify-between items-center mb-12">
+    <div class="font-headline text-xl font-bold text-[#002366]">The Junior Curator</div>
+    <button onclick="closeDrawer()" class="text-[#002366]/50 hover:text-[#002366]"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="flex flex-col gap-1">
+    <button onclick="closeDrawer(); navigate('home')" class="flex items-center gap-4 px-6 py-4 rounded-xl text-[#002366]/60 font-medium hover:bg-[#f3f4f5] transition-colors text-left">
+      <span class="material-symbols-outlined">home</span> Home
+    </button>
+    <button onclick="closeDrawer(); navigate('shop')" class="flex items-center gap-4 px-6 py-4 rounded-xl text-[#002366]/60 font-medium hover:bg-[#f3f4f5] transition-colors text-left">
+      <span class="material-symbols-outlined">watch</span> Collections
+    </button>
+    <button onclick="closeDrawer(); navigate('product')" class="flex items-center gap-4 px-6 py-4 rounded-xl text-[#002366]/60 font-medium hover:bg-[#f3f4f5] transition-colors text-left">
+      <span class="material-symbols-outlined">storefront</span> Featured
+    </button>
+    <button onclick="closeDrawer()" class="flex items-center gap-4 px-6 py-4 rounded-xl text-[#002366]/60 font-medium hover:bg-[#f3f4f5] transition-colors text-left">
+      <span class="material-symbols-outlined">history</span> Heritage
+    </button>
+    <button onclick="closeDrawer()" class="flex items-center gap-4 px-6 py-4 rounded-xl text-[#002366]/60 font-medium hover:bg-[#f3f4f5] transition-colors text-left">
+      <span class="material-symbols-outlined">help_outline</span> Support
+    </button>
+  </div>
+  <div class="mt-auto pt-8 border-t border-outline-variant/20">
+    <p class="text-[10px] uppercase tracking-widest text-[#002366]/40">© 2024 JK Brand</p>
+  </div>
+</nav>
+
+<!-- ===================== CART DRAWER ===================== -->
+<div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[59]"></div>
+<div id="cart-drawer" class="fixed inset-y-0 right-0 z-[60] bg-[#f8f9fa] w-full max-w-sm shadow-2xl flex flex-col">
+  <div class="flex justify-between items-center p-6 border-b border-outline-variant/20">
+    <div>
+      <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">Your Bag</p>
+      <h2 class="font-headline text-xl font-bold text-primary">2 Items</h2>
+    </div>
+    <button onclick="closeCart()" class="text-[#002366]/50 hover:text-[#002366]"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="flex-1 overflow-y-auto p-6 space-y-4">
+    <!-- Cart Item 1 -->
+    <div class="flex gap-4 bg-surface-container-lowest rounded-xl p-4 editorial-shadow">
+      <div class="w-20 h-20 rounded-xl overflow-hidden flex-none product-img-wrap">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-I3YJluQKTC0bYYYiraUt5t_Q4UBQDVlvR4aelbZWHBGUi2A--tUPOfwvM9eNUeSxbz55xIkRc-jdLaA4n7TqDFMUmOlBrsaUyQKaIRst9inYI9ekRCowOvwfFWlbqwRdvVdXTFYEHUo8zt_p0dLPVnpzGcgwZJFBiFTWtnE8rr0YA3Om5XVPrsTnOida7lX_y7AEVzRGuDjenHuRE3kdcClkLSnn0-CZ-3i5dI4I0a0I2a1Lyux2sKZNKM5oamdDRG-5Uh73-9M" alt="Watch"/>
+      </div>
+      <div class="flex-1">
+        <h3 class="font-headline font-bold text-primary text-sm">The Little Voyager Watch</h3>
+        <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Silver · Age 8–12</p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2 bg-surface-container-high rounded-full px-2 py-1">
+            <button class="w-5 h-5 flex items-center justify-center text-primary font-bold text-sm" onclick="updateQty(this,-1)">−</button>
+            <span class="text-xs font-bold text-primary w-4 text-center">1</span>
+            <button class="w-5 h-5 flex items-center justify-center text-primary font-bold text-sm" onclick="updateQty(this,1)">+</button>
+          </div>
+          <span class="font-headline font-bold text-primary">$245</span>
+        </div>
+      </div>
+    </div>
+    <!-- Cart Item 2 -->
+    <div class="flex gap-4 bg-surface-container-lowest rounded-xl p-4 editorial-shadow">
+      <div class="w-20 h-20 rounded-xl overflow-hidden flex-none product-img-wrap">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVUEIwJq9sbv7_Rwk8IgZu7fQkr0h9wQWUFnzhb3GilTc7j9qT8etn_NRGwivjy4Dby_gOvSn-V0HXKpxYyGjfsLff31fycz2p9BWLoWpitJwN_azzDpBSx30yIy2EffZo4oKZNaHU6bX2yMDsUBWhMssdDyRtjzqxfKOtM6MlXUwHpNjUf8Xr3rE901gAeF7JjxfdpU8cXISkdW-A8MSQmYYXzljZH-OchgvRPCH3QNrdLhhOlGIEPWBDQBuGbcLUqArYwKnUrLQ" alt="Bracelet"/>
+      </div>
+      <div class="flex-1">
+        <h3 class="font-headline font-bold text-primary text-sm">Starlight Bracelet</h3>
+        <p class="text-[10px] text-on-surface-variant uppercase tracking-wider mb-2">Gold · Age 5–10</p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2 bg-surface-container-high rounded-full px-2 py-1">
+            <button class="w-5 h-5 flex items-center justify-center text-primary font-bold text-sm" onclick="updateQty(this,-1)">−</button>
+            <span class="text-xs font-bold text-primary w-4 text-center">1</span>
+            <button class="w-5 h-5 flex items-center justify-center text-primary font-bold text-sm" onclick="updateQty(this,1)">+</button>
+          </div>
+          <span class="font-headline font-bold text-primary">$120</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-6 bg-surface-container-lowest border-t border-outline-variant/20">
+    <div class="flex justify-between mb-2">
+      <span class="text-sm text-on-surface-variant">Subtotal</span>
+      <span class="font-bold text-primary" id="cart-subtotal">$365.00</span>
+    </div>
+    <div class="flex justify-between mb-6">
+      <span class="text-sm text-on-surface-variant">Shipping</span>
+      <span class="text-sm font-bold text-secondary">Free</span>
+    </div>
+    <button onclick="closeCart(); navigate('checkout')" class="w-full bg-primary text-on-primary py-4 rounded-full font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95">
+      Proceed to Checkout <span class="material-symbols-outlined text-sm">arrow_forward</span>
+    </button>
+    <button onclick="navigate('shop'); closeCart()" class="w-full mt-3 py-3 text-xs font-bold tracking-widest uppercase text-primary/50 hover:text-primary transition-colors">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- ===================== FILTER SHEET ===================== -->
+<div id="filter-overlay" onclick="closeFilter()" class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[59]"></div>
+<div id="filter-sheet" class="fixed inset-x-0 bottom-0 z-[60] bg-surface-container-lowest rounded-t-[2.5rem] p-8 max-h-[85vh] overflow-y-auto">
+  <div class="w-12 h-1.5 bg-outline-variant/30 rounded-full mx-auto mb-8"></div>
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="font-headline text-2xl font-bold text-primary">Filters</h2>
+    <button onclick="closeFilter()" class="text-secondary font-bold text-sm tracking-widest uppercase">Reset All</button>
+  </div>
+  <div class="mb-8">
+    <h4 class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-4">Category</h4>
+    <div class="flex flex-wrap gap-2">
+      <button class="px-5 py-2 rounded-full bg-primary text-on-primary text-xs font-bold">All Watches</button>
+      <button class="px-5 py-2 rounded-full border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">Chronographs</button>
+      <button class="px-5 py-2 rounded-full border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">Digital</button>
+      <button class="px-5 py-2 rounded-full border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">Essentials</button>
+    </div>
+  </div>
+  <div class="mb-8">
+    <h4 class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-4">Age Range</h4>
+    <div class="grid grid-cols-2 gap-3">
+      <button class="flex items-center justify-between px-4 py-4 rounded-xl border border-outline-variant/30 hover:border-secondary transition-colors">
+        <span class="text-sm font-bold">5 – 8 Years</span>
+      </button>
+      <button class="flex items-center justify-between px-4 py-4 rounded-xl border border-secondary bg-secondary-container/20">
+        <span class="text-sm font-bold">9 – 12 Years</span>
+        <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </button>
+    </div>
+  </div>
+  <div class="mb-12">
+    <h4 class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-4">Price Range: $150 – $450</h4>
+    <input type="range" min="0" max="600" value="300" class="w-full accent-secondary"/>
+  </div>
+  <button onclick="closeFilter()" class="w-full bg-primary text-on-primary py-5 rounded-full font-bold tracking-widest uppercase text-sm shadow-xl shadow-primary/20">
+    Show 142 Results
+  </button>
+</div>
+
+<!-- ===================== PAGE: HOME ===================== -->
+<div id="page-home" class="page active pt-16 pb-24">
+  <!-- Hero -->
+  <section class="relative h-[82vh] min-h-[600px] flex flex-col justify-end px-6 pb-14 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img alt="Junior Style Hero" class="w-full h-full object-cover object-center scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj_PmLTlFMW59Q7xVnoSw4CvmGrhhZeNKRUJgGn4FIr6wlYmofsH0tIa36HBGhZW7WnKNYgJ4IfiUR08yWo-UowjiWg2o0IF3biMrbPudrwVjVGQ8fx8gK9TYWmF-hXm6ptY4ys4XKECqmn3w3g9RPM54gdEBmbQgYjd-KACqR-zCUtaM8WdKvW_qvAweXCHJqVx8YE5vR50WUfMKptvAIZxXMQNgP4iwejNLXMzc31jN03nfumlSUAd_nTvC-QZkPWivdmzOf9R8"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent"></div>
+    </div>
+    <div class="relative z-10 space-y-4 max-w-lg">
+      <p class="font-label text-secondary-container tracking-[0.25em] uppercase text-xs font-bold">The Junior Curator</p>
+      <h1 class="font-headline text-5xl font-extrabold text-on-primary leading-tight tracking-tight">Grown-up Style,<br/>Junior Scale.</h1>
+      <p class="text-on-primary/75 text-sm max-w-[80%] leading-relaxed">Defining the new standard for youth accessories through the lens of timeless horology and craft.</p>
+      <div class="pt-4 flex gap-3">
+        <button onclick="navigate('shop')" class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold text-sm flex items-center gap-2 hover:scale-95 transition-all active:scale-90" style="background:linear-gradient(135deg,#00113a,#002366)">
+          Explore Collections <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+        <button onclick="navigate('product')" class="bg-white/20 backdrop-blur-md text-white px-6 py-4 rounded-full font-bold text-sm hover:bg-white/30 transition-all">
+          Featured
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collections Bento -->
+  <section class="px-6 py-16 bg-surface">
+    <div class="flex justify-between items-end mb-10">
+      <h2 class="font-headline text-2xl font-bold text-primary tracking-tight">The Essentials</h2>
+      <button onclick="navigate('shop')" class="font-label text-xs uppercase tracking-widest text-primary/50 border-b border-primary/20 pb-1 hover:text-primary transition-colors">View All</button>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div onclick="navigate('shop')" class="col-span-2 relative h-64 rounded-xl overflow-hidden bg-surface-container-low cursor-pointer group">
+        <img alt="Watches" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3bNbN72m4vwtUUVWLYh1UcJb4O86wJqjNt4pW7qwknCJPRXNIGEE72vuMQUaGstMzlivqjYzPEeohrH9gNKMUoSBUeszeCWSSJ6Kg0fxVpZirKsc_ljFVslRss-71cUNwiIHFArO9pSYcqRAoc_yCcg2zC5XOi_7kV-g61KJy9dbXspQK8ClPVcdnMYO47hCa3OQ4wyb7pz9ZQcM4FpNcjRt8ajixAHnlvI03WvKqgOcbHWB18BunHX7mnZ1X11ifV4QEmUAEnM"/>
+        <div class="absolute inset-0 bg-primary/25"></div>
+        <div class="absolute bottom-6 left-6">
+          <h3 class="font-headline text-2xl font-bold text-white mb-1">Watches</h3>
+          <p class="text-white/70 text-xs uppercase tracking-widest font-bold">Heritage Series</p>
+        </div>
+      </div>
+      <div onclick="navigate('shop')" class="relative h-48 rounded-xl overflow-hidden bg-surface-container-low cursor-pointer group">
+        <img alt="Bracelets" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaVI_lZtUvbHHherpD6QPi8G7F2qOMXF_riQgHneaVQaLWar-zRrS_l6UxV6HnZT1IKlsM-iSPEfH3D3MScuO30fUzG5MM4V2CpgN0S2MoCBRIOxlazwLe0Wa2UuobV5ltGKo7UdUxWrevB5G1kSIZFi416Y2FMoiFAFSuJTSkMCQq2l148YwfQsAxp-6aiDqEmAouDOXOZ3GPBZI_UI9ipMEw-5kvH-KeENNfKBHKRQAf1n6qHuwZL_iUDxto5_E0PpOBuNzD0No"/>
+        <div class="absolute inset-0 bg-primary/15"></div>
+        <div class="absolute bottom-4 left-4"><h3 class="font-headline text-lg font-bold text-white">Bracelets</h3></div>
+      </div>
+      <div onclick="navigate('shop')" class="relative h-48 rounded-xl overflow-hidden bg-surface-container-low cursor-pointer group">
+        <img alt="Accessories" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTy-MEyhfLmzEJVj2uwlfpH21BlokwhMwJ4bmoBftklGUiY5qVl6Ojq6hQ-bDPembHhOaIz7RizOQPE0-bUfXMJgySCERnSYwnghnc8Dx_Kyo_950U2WsF3cxYt5gkKQLZu2NsJba9CZBfjU86YJn_9pWjZw2sGRzcC09xVHRhtQFsOzBz3MIDE2c_SJGOMQ6-Fc7jRlKzMNjXhFZI50ay5WzmrE0L0X0-0gUDKi2_EU1RQDyrnKw0b6k8oO73TTcmH_jEFR4a3XI"/>
+        <div class="absolute inset-0 bg-primary/15"></div>
+        <div class="absolute bottom-4 left-4"><h3 class="font-headline text-lg font-bold text-white">Accessories</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending -->
+  <section class="py-16 bg-surface-container-low">
+    <div class="px-6 mb-10">
+      <p class="font-label text-secondary tracking-[0.2em] uppercase text-[10px] font-bold mb-2">Editor's Selection</p>
+      <h2 class="font-headline text-2xl font-extrabold text-primary tracking-tight">Trending Now</h2>
+    </div>
+    <div class="flex overflow-x-auto gap-6 px-6 pb-8 no-scrollbar">
+      <!-- Card 1 -->
+      <div onclick="navigate('product')" class="flex-none w-56 group cursor-pointer">
+        <div class="aspect-[4/5] bg-surface-container-lowest rounded-xl mb-4 overflow-hidden relative">
+          <div class="absolute top-4 right-4 z-10">
+            <span class="bg-secondary-container text-on-secondary-container text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">New</span>
+          </div>
+          <img alt="The Diplomat Watch" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLP7ddyGYe9dKwugRGesJ_B63U0x6lpfzIz52chktD10HR3b0hh8mW9PD9rEGWvxfIIS9rOLcM_SpPWc_HZJuCt3JmmI7CPW1laaw2JH8_eq8FqS_XmWf5xBehAPO_j56pgXrlWCtVaer2A-z6vO_yP9gWmVwaY7ehT9hfWrCzFONEspgr15F5QR3tqS9Ki3sHtWcTRH4C5mLx1gkcwG_0iUEhmY1a-MZAlQpS018RyqUULs9gjaKnE_YvdHjXvOnWzKiVcd5Bj_0"/>
+        </div>
+        <h3 class="font-headline font-bold text-primary mb-1 text-sm">The Diplomat I</h3>
+        <p class="text-on-surface-variant text-sm font-medium">$245.00</p>
+      </div>
+      <!-- Card 2 -->
+      <div onclick="navigate('product')" class="flex-none w-56 group translate-y-8 cursor-pointer">
+        <div class="aspect-[4/5] bg-surface-container-lowest rounded-xl mb-4 overflow-hidden relative">
+          <img alt="Silver Cuff" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcPaKBbJEWQQvlM6qAzEnt4bzdkc-Ch_DueWMGqOG33BEa9oxZftabaaC1pkwTwMPySmh063mber3MJPC6gnFuFFpbY-AKCfO3jCHmYsDY0nRT0xGEEeNGG1uY7QQFvZbUaMR_OBp1Ia3uSOxrkTzmEoS5rb5UdqpLPCxwaiWenMFahSn79YxkX3mdesHGlR8FufH-1k9jRTYoYLes9UKw2glP4Db4NzZiFIg-vV726ROvqX4l9jvUYQ3cmSNf_YhIXXTWCVa6YTY"/>
+        </div>
+        <h3 class="font-headline font-bold text-primary mb-1 text-sm">Brushed Silver Cuff</h3>
+        <p class="text-on-surface-variant text-sm font-medium">$120.00</p>
+      </div>
+      <!-- Card 3 -->
+      <div onclick="navigate('product')" class="flex-none w-56 group cursor-pointer">
+        <div class="aspect-[4/5] bg-surface-container-lowest rounded-xl mb-4 overflow-hidden relative">
+          <img alt="Chrono Mint" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJA4X228-fTk7NHgC5Xx81iA8BroPJMtgA7OmMy9Lie3-S33b3mw0JIVdXUUCq26BS8Dbfzytck7-P8RTgDEawaQvfAR8sY1KEorO1FQZc7-9nHHynlhthqHfuhdzpu5IZxoXaKRuc2VBSq2dMiY0mqDfYGwkVQaqP03xiJCA3FdBORU2zqD6Fe0ZxvFbHXLzXVpKvjzVPkzuBc411p80QdJ8iNNGzvCseeGv2n4JEV_HfXPkK337d-ycrxdnWUKGBHwHrcr1-Qo0"/>
+        </div>
+        <h3 class="font-headline font-bold text-primary mb-1 text-sm">The Chrono Mint</h3>
+        <p class="text-on-surface-variant text-sm font-medium">$280.00</p>
+      </div>
+      <!-- Card 4 -->
+      <div onclick="navigate('product')" class="flex-none w-56 group translate-y-8 cursor-pointer">
+        <div class="aspect-[4/5] bg-surface-container-lowest rounded-xl mb-4 overflow-hidden relative">
+          <div class="absolute top-4 right-4 z-10">
+            <span class="bg-primary text-on-primary text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">Limited</span>
+          </div>
+          <img alt="Heritage Silver" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ_0jack4F3kRF2DpBQX0duDIsdf60HYSnRwAeg-9p4EwDRfoZ3jG4P4oi2PDMW6zRuGTlRCLAbcHrE4hlItTjEP6lKJSnV_OrgJR7Pj5rFA__IyB1k_Zx0FkFdlkdhQTdl9hAsGxWC5ZVWruO1POzMAOeVBQjH5Eu5wrn4DI7CJpJXRCslTsIjbZdyvOX-pvwIG_V4EMqFMymhsUxJVcsibyzCHQdnHCZcSBhi6o93zmE6_L-Orsx2IgDW10HB-dIejUq3vyGBls"/>
+        </div>
+        <h3 class="font-headline font-bold text-primary mb-1 text-sm">The Heritage Silver</h3>
+        <p class="text-on-surface-variant text-sm font-medium">$285.00</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="mx-6 my-16 p-8 rounded-xl bg-primary-container relative overflow-hidden">
+    <div class="absolute -top-12 -right-12 w-32 h-32 bg-secondary/20 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-secondary-fixed/10 rounded-full blur-2xl"></div>
+    <div class="relative z-10 text-center space-y-6">
+      <h2 class="font-headline text-2xl font-bold text-white tracking-tight leading-tight">Join the<br/>Junior Curators</h2>
+      <p class="text-[#758dd5] text-sm leading-relaxed px-4">Exclusive access to limited releases and the philosophy behind sophisticated youth style.</p>
+      <div class="space-y-3">
+        <input class="w-full bg-white/10 border-none rounded-full px-6 py-4 text-white placeholder-white/40 focus:outline-none focus:ring-1 focus:ring-secondary text-sm" placeholder="Email Address" type="email"/>
+        <button class="w-full bg-secondary text-white py-4 rounded-full font-bold text-sm hover:opacity-90 transition-opacity active:scale-95">Subscribe</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-surface-container-low py-12 px-8">
+    <div class="flex flex-col items-center gap-6 max-w-7xl mx-auto">
+      <div class="font-headline text-sm font-bold text-[#002366] tracking-[0.2em]">JK BRAND</div>
+      <div class="flex flex-wrap justify-center gap-6">
+        <a href="#" class="text-[10px] uppercase tracking-widest text-[#002366]/50 hover:text-[#002366] transition-colors">Privacy</a>
+        <a href="#" class="text-[10px] uppercase tracking-widest text-[#002366]/50 hover:text-[#002366] transition-colors">Terms</a>
+        <a href="#" class="text-[10px] uppercase tracking-widest text-[#002366]/50 hover:text-[#002366] transition-colors">Shipping</a>
+        <a href="#" class="text-[10px] uppercase tracking-widest text-[#002366]/50 hover:text-[#002366] transition-colors">Returns</a>
+      </div>
+      <p class="text-[#002366]/40 text-[10px] uppercase tracking-widest">© 2024 JK Brand. The Sophisticated Youth Editorial.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: SHOP ===================== -->
+<div id="page-shop" class="page pt-24 pb-28 px-6 max-w-2xl mx-auto">
+  <section class="mb-10">
+    <p class="font-label text-secondary tracking-[0.2em] uppercase text-[10px] font-bold mb-3">All Collections</p>
+    <h1 class="font-headline text-4xl font-extrabold tracking-tight text-primary mb-3">Watches &amp; Essentials</h1>
+    <p class="text-on-surface-variant text-sm leading-relaxed max-w-[85%]">Curated timepieces and artisanal carryalls designed for the sophisticated youth. Quality that transcends generations.</p>
+  </section>
+
+  <!-- Filter bar -->
+  <div class="flex items-center justify-between mb-10 sticky top-16 py-4 bg-background/95 backdrop-blur-sm z-40">
+    <button onclick="openFilter()" class="flex items-center gap-2 bg-surface-container-low px-5 py-3 rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+      <span class="material-symbols-outlined text-sm">tune</span>
+      <span class="text-xs font-bold tracking-widest uppercase font-headline">Filters</span>
+    </button>
+    <div class="flex items-center gap-1 text-on-surface-variant cursor-pointer">
+      <span class="text-[10px] font-bold tracking-widest uppercase">Sort By</span>
+      <span class="material-symbols-outlined text-lg">expand_more</span>
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="grid grid-cols-1 gap-12">
+    <!-- Product 1 -->
+    <article onclick="navigate('product')" class="group cursor-pointer">
+      <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[4/5] mb-4 product-img-wrap">
+        <div class="absolute top-4 left-4 z-10">
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Heritage Collection</span>
+        </div>
+        <img alt="The Heritage Silver" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ_0jack4F3kRF2DpBQX0duDIsdf60HYSnRwAeg-9p4EwDRfoZ3jG4P4oi2PDMW6zRuGTlRCLAbcHrE4hlItTjEP6lKJSnV_OrgJR7Pj5rFA__IyB1k_Zx0FkFdlkdhQTdl9hAsGxWC5ZVWruO1POzMAOeVBQjH5Eu5wrn4DI7CJpJXRCslTsIjbZdyvOX-pvwIG_V4EMqFMymhsUxJVcsibyzCHQdnHCZcSBhi6o93zmE6_L-Orsx2IgDW10HB-dIejUq3vyGBls"/>
+        <button onclick="event.stopPropagation(); addToCart()" class="absolute bottom-4 right-4 z-10 w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+        </button>
+      </div>
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-lg font-bold text-primary mb-1">The Heritage Silver</h3>
+          <div class="flex items-center gap-1 mb-1">
+            <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+            <span class="text-xs font-bold text-on-surface">4.9</span>
+            <span class="text-[10px] text-on-surface-variant ml-1">(124 reviews)</span>
+          </div>
+        </div>
+        <span class="text-lg font-bold text-primary">$285</span>
+      </div>
+    </article>
+
+    <!-- Product 2 -->
+    <article onclick="navigate('product')" class="group cursor-pointer pl-8">
+      <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[4/5] mb-4 product-img-wrap">
+        <img alt="Stellar Gold Mesh" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMugYMJ_q1tv_CcOCQxhh0WcVlNAm1oVOupcrT4qCkoBeyKL3LgZ269TkSaHq5ra0e2v9Yg90HBTQAGWhX6mcKp6Rud430O1cKFXpkHaXKl2i4o-EGD5rzyTDzSoa_qQhxxOgJ6Sd3ks8MajemK2TA0FYPddKzJkAmRd97HN-dx_E5HXA4U00gfV6l8MD5UOGVuPdDhq8-z14T5m2sTJjh7CTzZiRRP5s1QIhzHNGBhsikYVrmLYovhFQzKjCfHw92-IXF0tNsg_M"/>
+        <button onclick="event.stopPropagation(); addToCart()" class="absolute bottom-4 right-4 z-10 w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+        </button>
+      </div>
+      <div class="flex justify-between items-start pr-8">
+        <div>
+          <h3 class="text-lg font-bold text-primary mb-1">Stellar Gold Mesh</h3>
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+            <span class="text-xs font-bold text-on-surface">4.8</span>
+            <span class="text-[10px] text-on-surface-variant ml-1">(86 reviews)</span>
+          </div>
+        </div>
+        <span class="text-lg font-bold text-primary">$310</span>
+      </div>
+    </article>
+
+    <!-- Product 3 -->
+    <article onclick="navigate('product')" class="group cursor-pointer pr-8">
+      <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[4/5] mb-4 product-img-wrap">
+        <div class="absolute top-4 left-4 z-10">
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">New Arrival</span>
+        </div>
+        <img alt="Explorer Digital Mint" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmomwkFdYfq-KPPOxamOcPy1beVKQSxo0Y36XFqItBEmwGMLV8HLauh-sFHUGzbbJAAj_aqV_wkhz8DdacTHVjInMItNOEED4CSItZTZ_4ZAcf_HKU-AvK_7wvS1pGCuHQBsRDkc56XDu7XBn3VQG_3UaV8AYvcbsQgMdB6yDbF-Abl4HEQcD7UwupQBGBLb5l5u8lQBu86ZaWdiG2ZflshGF9TuvZBOTNtUurHpkT_DwrtE-CPLd-lEKBsNoSUmGkeyKReJl9AJQ"/>
+        <button onclick="event.stopPropagation(); addToCart()" class="absolute bottom-4 right-4 z-10 w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+        </button>
+      </div>
+      <div class="flex justify-between items-start pl-8">
+        <div>
+          <h3 class="text-lg font-bold text-primary mb-1">Explorer Digital Mint</h3>
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+            <span class="text-xs font-bold text-on-surface">5.0</span>
+            <span class="text-[10px] text-on-surface-variant ml-1">(42 reviews)</span>
+          </div>
+        </div>
+        <span class="text-lg font-bold text-primary">$195</span>
+      </div>
+    </article>
+
+    <!-- Product 4 -->
+    <article onclick="navigate('product')" class="group cursor-pointer pl-8">
+      <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[4/5] mb-4 product-img-wrap">
+        <div class="absolute top-4 left-4 z-10">
+          <span class="bg-primary text-on-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Limited</span>
+        </div>
+        <img alt="The Diplomat I" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLP7ddyGYe9dKwugRGesJ_B63U0x6lpfzIz52chktD10HR3b0hh8mW9PD9rEGWvxfIIS9rOLcM_SpPWc_HZJuCt3JmmI7CPW1laaw2JH8_eq8FqS_XmWf5xBehAPO_j56pgXrlWCtVaer2A-z6vO_yP9gWmVwaY7ehT9hfWrCzFONEspgr15F5QR3tqS9Ki3sHtWcTRH4C5mLx1gkcwG_0iUEhmY1a-MZAlQpS018RyqUULs9gjaKnE_YvdHjXvOnWzKiVcd5Bj_0"/>
+        <button onclick="event.stopPropagation(); addToCart()" class="absolute bottom-4 right-4 z-10 w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+          <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+        </button>
+      </div>
+      <div class="flex justify-between items-start pr-8">
+        <div>
+          <h3 class="text-lg font-bold text-primary mb-1">The Diplomat I</h3>
+          <div class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+            <span class="text-xs font-bold text-on-surface">4.7</span>
+            <span class="text-[10px] text-on-surface-variant ml-1">(203 reviews)</span>
+          </div>
+        </div>
+        <span class="text-lg font-bold text-primary">$245</span>
+      </div>
+    </article>
+  </div>
+
+  <!-- Pagination -->
+  <nav class="mt-20 flex items-center justify-center gap-4">
+    <button class="w-10 h-10 rounded-full border border-outline-variant/20 flex items-center justify-center text-primary opacity-30" disabled>
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold">1</span>
+    <span class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-xs font-bold text-on-surface-variant cursor-pointer">2</span>
+    <span class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-xs font-bold text-on-surface-variant cursor-pointer">3</span>
+    <button class="w-10 h-10 rounded-full border border-outline-variant/20 flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ===================== PAGE: PRODUCT DETAIL ===================== -->
+<div id="page-product" class="page pt-16 pb-36">
+  <!-- Image Carousel -->
+  <section class="relative w-full aspect-[4/5] bg-surface-container-low overflow-hidden max-w-2xl mx-auto">
+    <div id="carousel" class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar h-full">
+      <div class="snap-center shrink-0 w-full h-full relative">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnMF2jIiJf6aXWtsdM5DACQ59r7eZNpmyoBCZ6KlWuOtxBs7UJzYNLsMu89Oo3LR_-0MflS9ylBoW9b3_35Q2Dc_d6kyr6k-ObAKn7Qr_4yL3GbaUFhkxOVguTz35LGgHtHz4EReBCfz4eqMKoHSym9-QGvBTHCePStNDS6tJsD80sxY2TqapVKwFJlKYbghmlDF51bOYrBQuO-xawVqlPgqFgEJzgZSixSDW3HdZFe5c06XE709ha3xe0wcXFCGprxXADSaRmZJ4" alt="Product 1"/>
+      </div>
+      <div class="snap-center shrink-0 w-full h-full relative">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjsNJ0VSfwS2kV6EUTZQZMT8Ml7QglHhkI5b2ZbtHt24oAY2KU5k7ZKnXSbTihydMR2CgC7GgzwZi5LCcIbQXtvWL4iHer45b26n7blsRtzYRuJgFfRJQOhlug1ynNHosxtrkY53N_66WXFazJptSeDhfJkTqHXmDYDf-Uh7Ns0-sIIBw7g52tWX_3pZQb6dSdYMc-b8MolI_-0ui86QHjlBhWAbuUHZOz2TJL53iobm1xEziK5E8p3YqRiRHnBr-nUxO2H6tTN-0" alt="Product 2"/>
+      </div>
+      <div class="snap-center shrink-0 w-full h-full relative">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAkTAtq6oGbN90WS70_44eEzfC7uaD4IzGE7OVTs0654X_cnerw1q7cCHnp10-B3Z75ei4K_42-Rnc9S-40KrDSrXW3c_PPqL-hOwmIoz609kdbjuy0UAId_BA0cjNL65UrwLOvzuIHgKW_Me9LGJtTlsGryV6dcTJeLvDVVgo8EZpGOmWDPv1jMZd_s62TS5ygmD9rKQLlvz4xfOC1Rw2S-jwRTWt5uKt5-Xj4MNVG2UFy_X4g8e3YWgQC5zF5VPdn60b8MaR0MU" alt="Product 3"/>
+      </div>
+    </div>
+    <!-- Dot indicators -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+      <div class="w-8 h-1 bg-primary rounded-full"></div>
+      <div class="w-2 h-1 bg-outline-variant/50 rounded-full"></div>
+      <div class="w-2 h-1 bg-outline-variant/50 rounded-full"></div>
+    </div>
+    <!-- Wishlist button -->
+    <button class="absolute top-20 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-md">
+      <span class="material-symbols-outlined text-on-surface text-sm">favorite</span>
+    </button>
+  </section>
+
+  <!-- Product Info -->
+  <section class="px-6 pt-8 max-w-2xl mx-auto">
+    <div class="flex justify-between items-start mb-2">
+      <span class="font-label text-secondary text-sm font-bold tracking-widest uppercase">New Heritage Collection</span>
+    </div>
+    <h2 class="font-headline text-3xl font-bold text-primary tracking-tight mb-2">JK Time Classic</h2>
+    <div class="flex items-center gap-3 mb-4">
+      <p class="text-2xl font-headline font-bold text-on-surface">$285.00</p>
+      <span class="text-sm text-on-surface-variant line-through">$340.00</span>
+      <span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-1 rounded-full font-bold">SAVE 16%</span>
+    </div>
+    <p class="text-on-surface-variant leading-relaxed mb-8 text-sm">A precision-crafted timepiece that bridges the world of junior horology and adult sophistication. Swiss-inspired movements wrapped in a stainless steel case sized for growing wrists.</p>
+    
+    <!-- Feature chips -->
+    <div class="flex flex-wrap gap-3 mb-10">
+      <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full">
+        <span class="material-symbols-outlined text-sm">schedule</span>
+        <span class="text-xs font-bold uppercase tracking-wider">Precision Analog</span>
+      </div>
+      <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full">
+        <span class="material-symbols-outlined text-sm">water_drop</span>
+        <span class="text-xs font-bold uppercase tracking-wider">Water-Resist</span>
+      </div>
+      <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full">
+        <span class="material-symbols-outlined text-sm">verified_user</span>
+        <span class="text-xs font-bold uppercase tracking-wider">Sapphire Glass</span>
+      </div>
+    </div>
+
+    <!-- Size / Age selection -->
+    <div class="mb-10">
+      <h4 class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-4">Age Range / Wrist Size</h4>
+      <div class="flex gap-3">
+        <button class="px-5 py-3 rounded-full border border-outline-variant/30 text-sm font-bold hover:border-secondary transition-colors">5–8 yrs</button>
+        <button class="px-5 py-3 rounded-full bg-primary text-on-primary text-sm font-bold">9–12 yrs</button>
+        <button class="px-5 py-3 rounded-full border border-outline-variant/30 text-sm font-bold hover:border-secondary transition-colors">12+ yrs</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Feature Cards -->
+  <section class="px-6 mb-16 max-w-2xl mx-auto">
+    <h3 class="font-headline text-xl font-bold text-primary mb-6 uppercase tracking-widest">Coolness Factor</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2 bg-secondary-container rounded-xl p-6 flex flex-col justify-end min-h-[200px] relative overflow-hidden">
+        <img class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5TU1xniSBUlYmfZl-oP9PVq0tFgP756IBrVb31jufKuPFxmNrBP-eNfPvuXQcCZagR3XdJzYnLnsSqS4-IzG4JEzmuq5bHpn9Cyl" alt="Lifestyle"/>
+        <h4 class="font-headline text-xl font-extrabold text-on-secondary-container mb-2">Aspiring Authority</h4>
+        <p class="text-on-secondary-container text-sm leading-relaxed">Designed for kids who value quality over toys. A bridge to the adult world of horology.</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl p-5 editorial-shadow flex flex-col gap-3">
+        <span class="material-symbols-outlined text-secondary text-3xl">construction</span>
+        <h4 class="font-headline font-bold text-primary">Unbreakable Soul</h4>
+        <p class="text-xs text-on-surface-variant leading-tight">High-grade stainless steel that withstands every adventure.</p>
+      </div>
+      <div class="bg-primary rounded-xl p-5 flex flex-col gap-3">
+        <span class="material-symbols-outlined text-secondary-fixed text-3xl">auto_awesome</span>
+        <h4 class="font-headline font-bold text-on-primary">Lume Tech</h4>
+        <p class="text-xs text-on-primary-container leading-tight">Glow-in-the-dark hands for late-night secret base explorations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="bg-surface-container-low py-16 px-6 max-w-2xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <h3 class="font-headline text-xl font-bold text-primary uppercase tracking-widest">Curator Stories</h3>
+      <div class="flex gap-0.5 text-secondary">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">star</span>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+            <span class="font-headline font-bold text-on-primary text-sm">M</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-primary">Marcus H.</p>
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Verified Curator</p>
+          </div>
+        </div>
+        <p class="italic text-on-surface leading-relaxed text-sm">"My son refuses to take it off. The quality is undeniable—it doesn't look like a 'kid's watch' at all. Worth every penny."</p>
+      </div>
+      <div class="bg-surface-container-lowest p-6 rounded-xl editorial-shadow">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+            <span class="font-headline font-bold text-on-secondary text-sm">E</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-primary">Elena G.</p>
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Verified Curator</p>
+          </div>
+        </div>
+        <p class="italic text-on-surface leading-relaxed text-sm">"Gifted this for a birthday and every parent at the party asked where it was from. JK Brand is genuinely different."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Add to Cart -->
+  <div class="fixed bottom-20 left-0 right-0 px-6 z-40">
+    <div class="bg-surface-container-lowest/95 backdrop-blur-xl rounded-2xl p-4 editorial-shadow flex items-center gap-4 max-w-2xl mx-auto">
+      <div>
+        <p class="font-headline font-bold text-primary">$285.00</p>
+        <p class="text-[10px] text-secondary font-bold uppercase tracking-wider">In Stock</p>
+      </div>
+      <button onclick="addToCart(); openCart()" class="flex-1 bg-primary text-on-primary py-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95" style="background:linear-gradient(135deg,#00113a,#002366)">
+        <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+        Add to Bag
+      </button>
+      <button class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary text-sm">favorite</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE: CHECKOUT ===================== -->
+<div id="page-checkout" class="page pt-24 pb-28 px-6 max-w-2xl mx-auto">
+  <div class="mb-10">
+    <p class="font-label text-secondary tracking-[0.2em] uppercase text-[10px] font-bold mb-2">Secure Checkout</p>
+    <h1 class="font-headline text-3xl font-extrabold text-primary tracking-tight">Complete Your Order</h1>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="bg-surface-container-lowest rounded-2xl p-6 mb-8 editorial-shadow">
+    <h2 class="text-xs uppercase tracking-[0.2em] font-extrabold text-on-surface-variant mb-6">In Your Bag</h2>
+    <div class="space-y-4">
+      <div class="flex gap-4">
+        <div class="w-16 h-16 rounded-xl overflow-hidden flex-none product-img-wrap">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-I3YJluQKTC0bYYYiraUt5t_Q4UBQDVlvR4aelbZWHBGUi2A--tUPOfwvM9eNUeSxbz55xIkRc-jdLaA4n7TqDFMUmOlBrsaUyQKaIRst9inYI9ekRCowOvwfFWlbqwRdvVdXTFYEHUo8zt_p0dLPVnpzGcgwZJFBiFTWtnE8rr0YA3Om5XVPrsTnOida7lX_y7AEVzRGuDjenHuRE3kdcClkLSnn0-CZ-3i5dI4I0a0I2a1Lyux2sKZNKM5oamdDRG-5Uh73-9M" alt="Watch"/>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-headline font-bold text-primary text-sm">The Little Voyager Watch</h3>
+          <p class="text-[10px] text-on-surface-variant mb-1">Silver · Age 9–12 · Qty 1</p>
+          <p class="font-bold text-primary text-sm">$245.00</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-16 h-16 rounded-xl overflow-hidden flex-none product-img-wrap">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVUEIwJq9sbv7_Rwk8IgZu7fQkr0h9wQWUFnzhb3GilTc7j9qT8etn_NRGwivjy4Dby_gOvSn-V0HXKpxYyGjfsLff31fycz2p9BWLoWpitJwN_azzDpBSx30yIy2EffZo4oKZNaHU6bX2yMDsUBWhMssdDyRtjzqxfKOtM6MlXUwHpNjUf8Xr3rE901gAeF7JjxfdpU8cXISkdW-A8MSQmYYXzljZH-OchgvRPCH3QNrdLhhOlGIEPWBDQBuGbcLUqArYwKnUrLQ" alt="Bracelet"/>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-headline font-bold text-primary text-sm">Starlight Bracelet</h3>
+          <p class="text-[10px] text-on-surface-variant mb-1">Gold · Age 5–10 · Qty 1</p>
+          <p class="font-bold text-primary text-sm">$120.00</p>
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 pt-6 border-t border-outline-variant/20 space-y-2">
+      <div class="flex justify-between text-sm"><span class="text-on-surface-variant">Subtotal</span><span class="font-bold">$365.00</span></div>
+      <div class="flex justify-between text-sm"><span class="text-on-surface-variant">Shipping</span><span class="font-bold text-secondary">Free</span></div>
+      <div class="flex justify-between"><span class="font-headline font-bold text-primary">Total</span><span class="font-headline font-bold text-primary text-lg">$365.00</span></div>
+    </div>
+  </div>
+
+  <!-- Shipping Details -->
+  <div class="mb-8">
+    <h2 class="text-xs uppercase tracking-[0.2em] font-extrabold text-on-surface-variant mb-6">Shipping Details</h2>
+    <div class="space-y-3">
+      <input class="w-full bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:bg-surface-container-lowest transition-all" placeholder="Full Name" type="text"/>
+      <input class="w-full bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:bg-surface-container-lowest transition-all" placeholder="Email Address" type="email"/>
+      <input class="w-full bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:bg-surface-container-lowest transition-all" placeholder="Address Line 1" type="text"/>
+      <div class="grid grid-cols-2 gap-3">
+        <input class="bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:bg-surface-container-lowest transition-all" placeholder="City" type="text"/>
+        <input class="bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:bg-surface-container-lowest transition-all" placeholder="Postal Code" type="text"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment -->
+  <div class="mb-10">
+    <h2 class="text-xs uppercase tracking-[0.2em] font-extrabold text-on-surface-variant mb-6">Payment Method</h2>
+    <div class="space-y-3">
+      <label class="flex items-center gap-4 p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer">
+        <div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center flex-none">
+          <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+        </div>
+        <span class="material-symbols-outlined text-primary">credit_card</span>
+        <span class="font-bold text-sm text-primary">Credit / Debit Card</span>
+      </label>
+      <label class="flex items-center gap-4 p-4 rounded-xl border border-outline-variant/30 cursor-pointer hover:border-primary/30 transition-colors">
+        <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex-none"></div>
+        <span class="material-symbols-outlined text-on-surface-variant">account_balance</span>
+        <span class="font-bold text-sm text-on-surface-variant">Bank Transfer</span>
+      </label>
+    </div>
+    <div class="mt-4 space-y-3">
+      <input class="w-full bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all" placeholder="Card Number" type="text"/>
+      <div class="grid grid-cols-2 gap-3">
+        <input class="bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all" placeholder="MM / YY" type="text"/>
+        <input class="bg-surface-container-high border-none rounded-xl py-4 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all" placeholder="CVV" type="text"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Place Order -->
+  <button onclick="placeOrder()" class="w-full bg-primary text-on-primary py-5 rounded-full font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95 shadow-xl shadow-primary/20" style="background:linear-gradient(135deg,#00113a,#002366)">
+    <span class="material-symbols-outlined text-sm">lock</span>
+    Place Order — $365.00
+  </button>
+  <p class="text-center text-[10px] text-on-surface-variant/60 mt-4 uppercase tracking-wider">Secured by SSL · Encrypted Payment</p>
+</div>
+
+<!-- ===================== BOTTOM NAV ===================== -->
+<nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 h-20 bg-[#f8f9fa]/90 backdrop-blur-xl z-50 flex items-center justify-around px-4 border-t border-outline-variant/10">
+  <button onclick="navigate('home')" id="nav-home" class="flex flex-col items-center gap-1 text-[#002366] font-bold">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">home</span>
+    <span class="text-[10px] uppercase tracking-tighter">Home</span>
+    <div class="nav-dot"></div>
+  </button>
+  <button onclick="navigate('shop')" id="nav-shop" class="flex flex-col items-center gap-1 text-[#002366]/50">
+    <span class="material-symbols-outlined">watch</span>
+    <span class="text-[10px] uppercase tracking-tighter">Shop</span>
+    <div class="nav-dot opacity-0"></div>
+  </button>
+  <button onclick="navigate('product')" id="nav-product" class="flex flex-col items-center gap-1 text-[#002366]/50">
+    <span class="material-symbols-outlined">favorite</span>
+    <span class="text-[10px] uppercase tracking-tighter">Featured</span>
+    <div class="nav-dot opacity-0"></div>
+  </button>
+  <button onclick="openCart()" class="flex flex-col items-center gap-1 text-[#002366]/50">
+    <span class="material-symbols-outlined">shopping_bag</span>
+    <span class="text-[10px] uppercase tracking-tighter">Bag</span>
+    <div class="nav-dot opacity-0"></div>
+  </button>
+</nav>
+
+<!-- ===================== ORDER CONFIRMATION TOAST ===================== -->
+<div id="order-toast" class="fixed top-20 left-0 right-0 px-6 z-[100] pointer-events-none opacity-0 transition-opacity duration-500">
+  <div class="bg-secondary text-white rounded-2xl px-6 py-4 flex items-center gap-4 shadow-2xl max-w-md mx-auto">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+    <div>
+      <p class="font-headline font-bold text-sm">Order Placed Successfully!</p>
+      <p class="text-xs text-white/80">Your Junior Curator package is on its way.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentPage = 'home';
+  let cartCount = 2;
+
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    currentPage = page;
+    window.scrollTo(0, 0);
+
+    // Update bottom nav
+    ['home','shop','product'].forEach(id => {
+      const btn = document.getElementById('nav-' + id);
+      if (!btn) return;
+      const dot = btn.querySelector('.nav-dot');
+      if (id === page) {
+        btn.classList.remove('text-[#002366]/50');
+        btn.classList.add('text-[#002366]', 'font-bold');
+        dot.classList.remove('opacity-0');
+      } else {
+        btn.classList.add('text-[#002366]/50');
+        btn.classList.remove('font-bold');
+        dot.classList.add('opacity-0');
+      }
+    });
+
+    // Hide bottom nav on checkout
+    document.getElementById('bottom-nav').style.display = page === 'checkout' ? 'none' : 'flex';
+  }
+
+  function openDrawer() {
+    document.getElementById('nav-drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('nav-drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+  }
+
+  function openCart() {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+  }
+  function closeCart() {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+  }
+
+  function openFilter() {
+    document.getElementById('filter-sheet').classList.add('open');
+    document.getElementById('filter-overlay').classList.add('open');
+  }
+  function closeFilter() {
+    document.getElementById('filter-sheet').classList.remove('open');
+    document.getElementById('filter-overlay').classList.remove('open');
+  }
+
+  function addToCart() {
+    cartCount++;
+    document.getElementById('cart-badge').textContent = cartCount;
+    // Pulse animation
+    const badge = document.getElementById('cart-badge');
+    badge.style.transform = 'scale(1.4)';
+    setTimeout(() => badge.style.transform = 'scale(1)', 200);
+  }
+
+  function updateQty(btn, delta) {
+    const span = btn.parentElement.querySelector('span');
+    let val = parseInt(span.textContent) + delta;
+    if (val < 1) val = 1;
+    span.textContent = val;
+  }
+
+  function placeOrder() {
+    const toast = document.getElementById('order-toast');
+    toast.style.opacity = '1';
+    toast.style.pointerEvents = 'all';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => navigate('home'), 500);
+    }, 3000);
+  }
+</script>
+</body>
+</html>
